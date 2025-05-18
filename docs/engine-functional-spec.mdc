@@ -1,0 +1,102 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+**DKM-ENGINE: Functional Specification**
+
+Este documento descreve as **funcionalidades** e **módulos** que serão implementados na DKM-ENGINE, servindo como guia para desenvolvimento e documentação contínua.
+
+---
+
+## 1. Core da Engine
+
+### 1.1 Game Loop
+
+* Inicialização do `PIXI.Application` (canvas, ticker)
+* Gestão de `deltaTime`
+* Chamada de `update()` para a cena ativa
+
+### 1.2 Scene Management
+
+* Interface `Scene` (métodos `load`, `unload`, `update`)
+* `SceneManager` (registrar, alternar cenas, ticker hooks)
+* Cenas iniciais:
+
+  * `MenuScene` (tela de menu principal)
+  * `WorldScene` (tela de jogo / mundo)
+
+### 1.3 Input
+
+* Captura de teclado, mouse e toque
+* Mapeamento de teclas e callbacks customizados
+* Estado de entrada (pressed, justPressed, justReleased)
+
+### 1.4 Rendering Abstraction
+
+* **PixiJS** como motor de renderização (WebGL)
+* Wrapper para criar e adicionar `Sprites`, `Graphics` e `Text`
+* Suporte a camera 2D (scroll, zoom)
+
+## 2. Sistema de Recursos (Loader)
+
+* Carregamento assíncrono de assets via `PIXI.Loader`
+
+  * Imagens e spritesheets
+  * Áudio (Howler.js ou AudioContext)
+  * Dados JSON (mapas, configurações)
+* Cache e referenciamento dos recursos carregados
+* Indicador de progresso para telas de carregamento
+
+## 3. Entidades e Componentes
+
+* Classe base `Entity` com propriedades:
+
+  * `position`, `velocity`, `rotation`
+  * `sprite` ou `graphics`
+* Ciclo de vida: `init()`, `update(delta)`, `destroy()`
+* Possível adoção de ECS no futuro
+
+## 4. Sistema de Física & Colisão (opcional/modular)
+
+* Módulo de cálculo de movimento com gravidade e atrito
+* Detecção de colisão AABB básica
+* Gap de resposta de colisão (separação e bounce)
+
+## 5. Áudio
+
+* Reprodutor de efeitos sonoros (SFX)
+* Reprodutor de música de fundo com loop
+* Controle global de volume e mute
+
+## 6. UI / Ferramentas de Editor
+
+* Interface em React para:
+
+  * Painéis de configuração (opções, atalhos)
+  * Debug Overlay (FPS, logs, bounding boxes)
+  * Editor de níveis (tiled import/export)
+* Separação clara entre canvas do Pixi e DOM React
+
+## 7. Persistência e Salvar Jogo
+
+* Serialização de estado de jogo (JSON)
+* Slot system (vários saves)
+* Carregamento de save em `WorldScene`
+
+## 8. Packaging & Build
+
+* **Vite** para bundling e hot-reload
+* **Tauri** para empacotar como app desktop (Windows, macOS, Linux)
+* Pipelines de build (`npm run dev`, `npm run build`, `npm run tauri build`)
+
+## 9. Testes e Debug
+
+* Ferramentas de logging
+* Testes unitários para módulos críticos (SceneManager, Loader)
+* Fixture de assets para testes
+
+---
+
+> Este documento deve ser mantido atualizado conforme o projeto evolui. Cada módulo ou funcionalidade pode receber entradas detalhadas em seções dedicadas ou issues no repositório.
+
